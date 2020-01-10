@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Change a map's style</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css" rel="stylesheet" />
+<style>
+	body { margin: 0; padding: 0; }
+	#map { position: absolute; top: 0; bottom: 0; width: 100%; };
+</style>
+</head>
+<body>
+<style>
+.legend {
+background-color: #fff;
+border-radius: 5px;
+bottom: 30px;
+box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+font: 18px/23px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+padding: 20px;
+position: absolute;
+opacity: 0.9;
+right: 15px;
+z-index: 1;
+width: 20%;
+}
+ 
+.legend h4 {
+margin: 0 0 10px;
+}
+ 
+.legend div span {
+border-radius: 0%;
+display: inline-block;
+height: 12px;
+margin-right: 10px;
+width: 50px;
+}
+</style>
+ 
+<div id="map"></div>
+ 
+<div id="legend" class="legend">
+<h4>Інтенсивності руху індивідуального транспорту, одиниць/добу</h4>
+<div><span style="background-color: #681100"></span>більше 40 000</div>
+<div><span style="background-color: #b11200"></span>20 001 - 40 000</div>
+<div><span style="background-color: #df0000"></span>10 001 - 20 000</div>
+<div><span style="background-color: #f25800"></span>5 001 - 10 000</div>
+<div><span style="background-color: #f0b500"></span>2 001 - 5 000</div>
+<div><span style="background-color: #e6fe00"></span>1 001 - 2 000</div>
+<div><span style="background-color: #6af207"></span>501 - 1 000</div>
+<div><span style="background-color: #05b11b"></span>101 - 500</div>
+<div><span style="background-color: #096920"></span>1 - 100</div>
+</div>
+ 
+
+</style>
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoiYXBsdXNzLXVrcmFpbmUiLCJhIjoiY2s1NnUwNnhyMDZ2cjNmbWk0MHAwZTFtNyJ9.74AgY06hb35RJFM4Px-ACw';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/apluss-ukraine/ck56wjmc20s5s1cqgst9d0n81',
+        zoom: 12,
+        center: [30.52, 50.45],
+		minZoom: 9.5
+    });
+
+    map.addControl(new mapboxgl.NavigationControl());
+
+	
+	map.on('load', function() {
+        map.addLayer({
+            'id': 'prt-flow',
+            'type': 'line',
+            'source': {
+                type: 'vector',
+                url: 'mapbox://apluss-ukraine.camflrck'
+            },
+            'source-layer': 'prt-flow4-d8enlu',
+			'minzoom': 9,
+            'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            "paint": {
+                "line-color": [
+                    "match",
+                    ["get", "atype"],
+                    ["9"],
+                    "#096920",
+                    ["8"],
+                    "#05b11b",
+                    ["7"],
+                    "#6af207",
+                    ["6"],
+                    "#e6fe00",
+                    ["5"],
+                    "#f0b500",
+                    ["4"],
+                    "#f25800",
+                    ["3"],
+                    "#df0000",
+                    ["2"],
+                    "#b11200",
+                    ["1"],
+                    "#681100",
+                    "hsl(0, 0%, 100%)"
+                ],
+                "line-opacity": 0.8,
+                "line-width": [
+                    "interpolate",
+                    ["linear"],
+                    ["zoom"],
+                    9,
+                    [
+                        "match",
+                        ["get", "atype"],
+                        ["9"],
+                        0.1,
+                        ["8"],
+                        0.3,
+                        ["7"],
+                        0.6,
+                        ["6"],
+                        0.9,
+                        ["5"],
+                        1.2,
+                        ["4"],
+                        1.5,
+                        ["3"],
+                        1.8,
+                        ["2"],
+                        2.1,
+                        ["1"],
+                        2.4,
+                        0
+                    ],
+                    22,
+                    [
+                        "match",
+                        ["get", "atype"],
+						["9"],
+                        1,
+                        ["8"],
+                        3,
+                        ["7"],
+                        6,
+                        ["6"],
+                        9,
+                        ["5"],
+                        12,
+                        ["4"],
+                        15,
+                        ["3"],
+                        18,
+                        ["2"],
+                        21,
+                        ["1"],
+                        24,
+                        1
+                    ]
+                ]
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
